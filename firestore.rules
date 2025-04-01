@@ -1,0 +1,19 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Allow anyone to write to mail collection
+    match /mail/{document} {
+      allow create: if true;
+    }
+    
+    // Allow anyone to write to messages collection
+    match /messages/{document} {
+      allow create: if true;
+    }
+    
+    // Deny access to all other collections
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+} 
