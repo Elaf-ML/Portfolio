@@ -11,16 +11,25 @@ const Hero: React.FC = () => {
   // Typing animation effect
   useEffect(() => {
     let index = 0;
-    const timer = setInterval(() => {
-      if (index <= fullText.length) {
-        setTypedText(fullText.slice(0, index));
-        index++;
-      } else {
-        clearInterval(timer);
-      }
-    }, 100);
-    return () => clearInterval(timer);
-  }, []);
+    let timer: NodeJS.Timeout;
+    
+    const startTyping = () => {
+      timer = setInterval(() => {
+        if (index <= fullText.length) {
+          setTypedText(fullText.slice(0, index));
+          index++;
+        } else {
+          clearInterval(timer);
+        }
+      }, 100);
+    };
+    
+    startTyping();
+    
+    return () => {
+      if (timer) clearInterval(timer);
+    };
+  }, []); // Empty dependency array - only run once on mount
 
   // Animation variants
   const containerVariants = {
