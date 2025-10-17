@@ -2,9 +2,9 @@ import React, { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
 import { 
-  FiSend, FiGithub, FiLinkedin, FiTwitter, 
+  FiSend, FiGithub, FiLinkedin, 
   FiMail, FiMapPin, FiPhone, FiArrowRight, 
-  FiUser, FiMessageSquare, FiInfo 
+  FiUser, FiMessageSquare, FiInfo, FiZap 
 } from 'react-icons/fi';
 import { IconWrapper } from '../../utils/IconWrapper';
 import emailjs from '@emailjs/browser';
@@ -126,20 +126,22 @@ const Contact: React.FC = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3
+        staggerChildren: 0.15,
+        delayChildren: 0.2
       }
     }
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 50, opacity: 0, scale: 0.95 },
     visible: {
       y: 0,
       opacity: 1,
+      scale: 1,
       transition: {
         type: 'spring',
-        stiffness: 50
+        stiffness: 100,
+        damping: 15
       }
     }
   };
@@ -165,13 +167,27 @@ const Contact: React.FC = () => {
           className="max-w-6xl mx-auto"
         >
           {/* Section Header */}
-          <motion.div variants={itemVariants} className="text-center mb-16">
-            <span className="text-primary text-sm font-medium tracking-wider uppercase mb-2 inline-block">Get In Touch</span>
-            <h2 className="text-3xl md:text-5xl font-bold mb-6">Let's Work Together</h2>
-            <div className="w-24 h-1 bg-gradient-to-r from-primary to-secondary mx-auto rounded-full mb-8"></div>
-            <p className="text-gray-400 text-lg max-w-3xl mx-auto">
-              Got a project in mind or an opportunity to discuss? Feel free to reach out to me directly
-              or fill out the form below, and I'll get back to you as soon as possible.
+          <motion.div variants={itemVariants} className="text-center mb-20">
+            <motion.div 
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
+              whileHover={{ scale: 1.05 }}
+            >
+              <IconWrapper Component={FiZap} className="text-primary" size={18} />
+              <span className="text-primary text-sm font-medium">Let's Connect</span>
+            </motion.div>
+            
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
+                Get In Touch
+              </span>
+            </h2>
+            
+            <div className="w-24 h-1.5 bg-gradient-to-r from-primary via-secondary to-accent mx-auto rounded-full mb-8"></div>
+            
+            <p className="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+              Have a <span className="text-primary font-semibold">project in mind</span> or want to discuss 
+              <span className="text-secondary font-semibold"> potential opportunities</span>? 
+              Feel free to <span className="text-accent font-semibold">reach out</span>!
             </p>
           </motion.div>
 

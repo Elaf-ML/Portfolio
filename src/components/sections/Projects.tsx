@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useInView } from 'react-intersection-observer';
-import { FiGithub, FiExternalLink, FiCode } from 'react-icons/fi';
+import { FiGithub, FiExternalLink, FiCode, FiLink2, FiZap } from 'react-icons/fi';
 import { IconWrapper } from '../../utils/IconWrapper';
 
 interface Project {
@@ -14,6 +14,7 @@ interface Project {
   liveUrl?: string;
   githubUrl?: string;
   status: string;
+  relatedTo?: number;
 }
 
 const Projects: React.FC = () => {
@@ -22,7 +23,7 @@ const Projects: React.FC = () => {
     triggerOnce: true
   });
 
-  const [activeCategory, setActiveCategory] = useState('All');
+  const [activeCategory] = useState('All');
 
 
   const projectsData: Project[] = [
@@ -62,14 +63,27 @@ const Projects: React.FC = () => {
     {
       id: 4,
       title: 'Dashboard Website',
-      description: 'Currently in development and coming soon! A comprehensive e-commerce platform with advanced features for buying and selling products. Integrating modern technologies for a seamless shopping experience.',
+      description: 'Admin dashboard for the Ecom Website, featuring comprehensive analytics, product management, order tracking, and data visualization. Built with modern technologies for seamless performance and administrative control.',
       category: 'Fullstack Projects',
-      image: './images/dashboard.png',
+      image: './images/Dashboard.png',
       techStack: ['Python', 'MongoDB', 'Node.js', 'React', 'TypeScript', 'Tailwind CSS'],
-      status: 'in-progress',
+      liveUrl: 'https://dashboard-psi-five-88.vercel.app/',
+      status: 'completed',
+      relatedTo: 5,
     },
     {
       id: 5,
+      title: 'Ecom Website',
+      description: 'A modern e-commerce platform featuring product listings, shopping cart functionality, and seamless checkout experience. Built with responsive design for optimal user experience across all devices.',
+      category: 'Fullstack Projects',
+      image: './images/ecom.png',
+      techStack: ['React', 'TypeScript', 'Tailwind CSS', 'Node.js'],
+      liveUrl: 'https://syria-site.vercel.app/',
+      status: 'completed',
+      relatedTo: 4,
+    },
+    {
+      id: 6,
       title: 'ParkingTime Dashboard',
       description: 'Internship project for a leading parking management company in Sweden. Developed a comprehensive dashboard to streamline parking operations and improve user experience.',
       category: 'Internship Projects',
@@ -90,20 +104,22 @@ const Projects: React.FC = () => {
     visible: {
       opacity: 1,
       transition: {
-        staggerChildren: 0.1,
-        delayChildren: 0.3
+        staggerChildren: 0.15,
+        delayChildren: 0.2
       }
     }
   };
 
   const itemVariants = {
-    hidden: { y: 20, opacity: 0 },
+    hidden: { y: 50, opacity: 0, scale: 0.95 },
     visible: {
       y: 0,
       opacity: 1,
+      scale: 1,
       transition: {
         type: 'spring',
-        stiffness: 50
+        stiffness: 100,
+        damping: 15
       }
     }
   };
@@ -119,12 +135,27 @@ const Projects: React.FC = () => {
           className="max-w-7xl mx-auto"
         >
        
-          <motion.div variants={itemVariants} className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold mb-4">Previous Work & Projects</h2>
-            <div className="w-24 h-1 bg-primary mx-auto rounded-full mb-8"></div>
-            <p className="text-gray-400 text-lg max-w-3xl mx-auto">
-              Explore my recent projects showcasing my skills in frontend and backend development.
-              From web applications to API development and UI/UX design.
+          <motion.div variants={itemVariants} className="text-center mb-20">
+            <motion.div 
+              className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 mb-6"
+              whileHover={{ scale: 1.05 }}
+            >
+              <IconWrapper Component={FiZap} className="text-primary" size={18} />
+              <span className="text-primary text-sm font-medium">Portfolio Showcase</span>
+            </motion.div>
+            
+            <h2 className="text-4xl md:text-5xl font-bold mb-6">
+              <span className="bg-clip-text text-transparent bg-gradient-to-r from-primary via-secondary to-accent">
+                Featured Projects
+              </span>
+            </h2>
+            
+            <div className="w-24 h-1.5 bg-gradient-to-r from-primary via-secondary to-accent mx-auto rounded-full mb-8"></div>
+            
+            <p className="text-gray-400 text-lg md:text-xl max-w-3xl mx-auto leading-relaxed">
+              Explore my recent projects showcasing <span className="text-primary font-semibold">fullstack development</span> expertise.
+              From modern <span className="text-secondary font-semibold">web applications</span> to comprehensive 
+              <span className="text-accent font-semibold"> e-commerce solutions</span>.
             </p>
           </motion.div>
 
@@ -144,8 +175,27 @@ const Projects: React.FC = () => {
                 <motion.div
                   key={project.id}
                   variants={itemVariants}
-                  className={`bg-dark/30 backdrop-blur-sm rounded-xl overflow-hidden border border-gray-800 hover:border-primary/30 transition-all duration-300 group ${project.status === 'in-progress' ? 'relative' : ''}`}
+                  className="group relative"
                 >
+                  {/* Glow effect on hover */}
+                  <motion.div 
+                    className="absolute -inset-0.5 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-500"
+                    style={{
+                      background: project.relatedTo
+                        ? 'linear-gradient(45deg, rgba(139, 92, 246, 0.4), rgba(236, 72, 153, 0.4))'
+                        : 'linear-gradient(45deg, rgba(139, 92, 246, 0.2), rgba(6, 182, 212, 0.2))',
+                      filter: 'blur(20px)'
+                    }}
+                  />
+                  
+                  <motion.div
+                    className={`relative bg-dark/70 backdrop-blur-lg rounded-2xl overflow-hidden border transition-all duration-300 ${
+                      project.relatedTo 
+                        ? 'border-primary/50 hover:border-primary shadow-lg shadow-primary/10' 
+                        : 'border-gray-800 hover:border-primary/50'
+                    }`}
+                    whileHover={{ y: -8, scale: 1.02 }}
+                  >
             
                   {project.status === 'in-progress' && (
                     <div className="absolute top-4 left-4 z-10">
@@ -154,44 +204,65 @@ const Projects: React.FC = () => {
                       </span>
                     </div>
                   )}
+                  
+                  {/* Related Project Badge */}
+                  {project.relatedTo && (
+                    <div className="absolute top-4 left-4 z-10">
+                      <span className="text-xs font-medium px-3 py-1 bg-gradient-to-r from-primary to-secondary rounded-full text-white flex items-center gap-1 shadow-lg">
+                        <IconWrapper Component={FiLink2} size={12} />
+                        Related: {projectsData.find(p => p.id === project.relatedTo)?.title || 'Project'}
+                      </span>
+                    </div>
+                  )}
                 
                 
-                  <div className="relative h-52 overflow-hidden">
-                    <img
+                  <div className="relative h-64 overflow-hidden">
+                    <motion.img
                       src={project.image}
                       alt={project.title}
-                      className={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-110 ${project.status === 'in-progress' ? 'opacity-70' : ''}`}
+                      className={`w-full h-full object-cover ${project.status === 'in-progress' ? 'opacity-70' : ''}`}
+                      whileHover={{ scale: 1.1 }}
+                      transition={{ duration: 0.5 }}
                       onError={(e) => {
                         const target = e.target as HTMLImageElement;
                         target.onerror = null;
                         target.src = `https://via.placeholder.com/800x500?text=${project.title.replace(' ', '+')}`;
                       }}
                     />
-                    <div className="absolute inset-0 bg-gradient-to-t from-dark to-transparent opacity-60"></div>
+                    <div className="absolute inset-0 bg-gradient-to-t from-dark via-dark/50 to-transparent opacity-80 group-hover:opacity-60 transition-opacity duration-300"></div>
+                    
+                    {/* Overlay on hover */}
+                    <motion.div 
+                      className="absolute inset-0 bg-gradient-to-br from-primary/20 via-secondary/20 to-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                    />
                     
                     {/* Project Links */}
-                    <div className="absolute top-4 right-4 flex gap-2 opacity-0 transform translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300">
+                    <div className="absolute top-4 right-4 flex gap-3 opacity-0 transform translate-y-3 group-hover:opacity-100 group-hover:translate-y-0 transition-all duration-300 z-20">
                       {project.githubUrl && (
-                        <a
+                        <motion.a
                           href={project.githubUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 bg-dark/80 rounded-full text-white hover:bg-primary transition-colors duration-300"
+                          className="p-3 bg-dark/90 backdrop-blur-sm rounded-xl text-white border border-gray-700 hover:border-primary hover:bg-primary/20 transition-all duration-300 shadow-lg"
                           aria-label="View on GitHub"
+                          whileHover={{ scale: 1.1, rotate: 5 }}
+                          whileTap={{ scale: 0.95 }}
                         >
-                          <IconWrapper Component={FiGithub} size={18} />
-                        </a>
+                          <IconWrapper Component={FiGithub} size={20} />
+                        </motion.a>
                       )}
                       {project.liveUrl && project.status !== 'in-progress' && (
-                        <a
+                        <motion.a
                           href={project.liveUrl}
                           target="_blank"
                           rel="noopener noreferrer"
-                          className="p-2 bg-dark/80 rounded-full text-white hover:bg-primary transition-colors duration-300"
+                          className="p-3 bg-gradient-to-r from-primary to-secondary rounded-xl text-white shadow-lg hover:shadow-xl hover:shadow-primary/50 transition-all duration-300"
                           aria-label="View Live Project"
+                          whileHover={{ scale: 1.1, rotate: -5 }}
+                          whileTap={{ scale: 0.95 }}
                         >
-                          <IconWrapper Component={FiExternalLink} size={18} />
-                        </a>
+                          <IconWrapper Component={FiExternalLink} size={20} />
+                        </motion.a>
                       )}
                     </div>
                     
@@ -204,31 +275,36 @@ const Projects: React.FC = () => {
                   </div>
                   
                   {/* Project Info */}
-                  <div className="p-6">
-                    <h3 className="text-xl font-bold mb-3 group-hover:text-primary transition-colors duration-300 flex items-center">
+                  <div className="p-7">
+                    <h3 className="text-2xl font-bold mb-3 flex items-center group-hover:bg-clip-text group-hover:text-transparent group-hover:bg-gradient-to-r group-hover:from-primary group-hover:to-secondary transition-all duration-300">
                       {project.title}
                       {project.status === 'in-progress' && (
                         <span className="ml-2 inline-block w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
                       )}
                     </h3>
                     
-                    <p className="text-gray-400 text-sm mb-5">
+                    <p className="text-gray-400 text-sm leading-relaxed mb-6">
                       {project.description}
                     </p>
                     
                     {/* Tech Stack */}
                     <div className="flex flex-wrap gap-2">
                       {project.techStack.map((tech, index) => (
-                        <span
+                        <motion.span
                           key={index}
-                          className="inline-flex items-center text-xs px-2 py-1 rounded bg-gray-800/50 text-gray-300"
+                          className="inline-flex items-center text-xs px-3 py-1.5 rounded-lg bg-primary/10 text-primary border border-primary/20 font-medium hover:bg-primary/20 hover:border-primary/40 cursor-pointer transition-all duration-300"
+                          whileHover={{ scale: 1.05, y: -2 }}
+                          initial={{ opacity: 0, scale: 0.8 }}
+                          animate={{ opacity: 1, scale: 1 }}
+                          transition={{ delay: index * 0.05 }}
                         >
-                          <IconWrapper Component={FiCode} className="mr-1" size={10} />
+                          <IconWrapper Component={FiCode} className="mr-1.5" size={12} />
                           {tech}
-                        </span>
+                        </motion.span>
                       ))}
                     </div>
                   </div>
+                  </motion.div>
                 </motion.div>
               ))}
             </motion.div>

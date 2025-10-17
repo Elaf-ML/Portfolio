@@ -2,6 +2,7 @@ import React from 'react';
 import './App.css';
 import Navbar from './components/layout/Navbar';
 import Footer from './components/layout/Footer';
+import ScrollProgress from './components/layout/ScrollProgress';
 import Hero from './components/sections/Hero';
 import About from './components/sections/About';
 import Projects from './components/sections/Projects';
@@ -11,6 +12,7 @@ import Contact from './components/sections/Contact';
 function App() {
   return (
     <div className="min-h-screen bg-dark text-light font-sans">
+      <ScrollProgress />
       <Navbar />
       <main className="md:pl-20">
         <Hero />
